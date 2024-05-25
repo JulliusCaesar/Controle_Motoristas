@@ -1,0 +1,8 @@
+# Arquivos a serem ignorados
+arquivo_secreto.txt
+pasta_temp/
+*.log
+Notas_240222_201507.pdf
+
+# Diretório que deve ser ignorado recursivamente
+images/
