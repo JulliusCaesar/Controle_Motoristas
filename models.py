@@ -20,17 +20,15 @@ class Motorista:
             raise ValueError("A operação é obrigatória e deve conter apenas números.")
         if not self.conta:
             raise ValueError("A conta é obrigatória.")
-        if not isinstance(self.adiantamento, (int, float)) or self.adiantamento < 0:
-            raise ValueError("O adiantamento deve ser um número positivo")
 
     def salvar(self):
         self.validar()
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute('''
-        INSERT INTO motoristas (nome, banco, agencia, op, conta, adiantamento) 
-        VALUES (?, ?, ?, ?, ?, ?)
-        ''', (self.nome, self.banco, self.agencia, self.op, self.conta, self.adiantamento))
+        INSERT INTO motoristas (nome, banco, agencia, op, conta) 
+        VALUES (?, ?, ?, ?, ?)
+        ''', (self.nome, self.banco, self.agencia, self.op, self.conta))
         conn.commit()
         conn.close()
 
@@ -84,3 +82,22 @@ class Viagem:
         WHERE id = ?
         ''', (total_valor_apresentado, total_valor_deferido, resultado, status, self.motorista_id))
         conn.commit()
+
+class Adiantamento:
+    def __init__(self, motorista_id, valor, data_inicio, data_fim):
+        if not isinstance(valor, (int, float)) or valor < 0:
+            raise ValueError("Valor do adiantamento deve ser um número positivo.")
+        self.motorista_id = motorista_id
+        self.valor = valor
+        self.data_inicio = data_inicio
+        self.data_fim = data_fim
+
+    def salvar(self):
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO adiantamentos (motorista_id, valor, data_inicio, data_fim) 
+        VALUES (?, ?, ?, ?)
+        ''', (self.motorista_id, self.valor, self.data_inicio, self.data_fim))
+        conn.commit()
+        conn.close()

@@ -12,7 +12,6 @@ def conectar():
         quantidade_viagens INTEGER DEFAULT 0,
         valor_apresentado REAL DEFAULT 0.0,
         valor_deferido REAL DEFAULT 0.0,
-        adiantamento REAL DEFAULT 2500.0,
         resultado REAL DEFAULT 0.0,
         status TEXT DEFAULT 'aguardando',
         banco TEXT NOT NULL,
@@ -34,5 +33,16 @@ def conectar():
     )
     ''')
     
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS adiantamentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        motorista_id INTEGER,
+        valor REAL NOT NULL,
+        data_inicio TEXT NOT NULL,
+        data_fim TEXT NOT NULL,
+        FOREIGN KEY (motorista_id) REFERENCES motoristas(id)
+    )
+    ''')
+
     conn.commit()
     return conn
